@@ -1,0 +1,27 @@
+# Visual Studio cache and local settings
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Build folders (Keep your repo small!)
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Bb]in/
+[Oo]bj/
+
+# Compiled Binaries and Debugging files
+*.exe
+*.dll
+*.obj
+*.o
+*.pdb
+*.ilk
+*.lib
+*.exp
+
+# Auto-generated logs
+*.log
