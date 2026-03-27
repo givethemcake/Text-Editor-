@@ -108,4 +108,50 @@ bool areEqual(const wchar_t* s1, const wchar_t* s2) {
 
 
 
+int findSubstring(const wchar_t* str, wchar_t* substring) {
 
+    int subSize = getLength(substring);
+    int size = getLength(str);
+
+    if (subSize == 0)
+        return -1;
+
+    bool foundMatch = false;
+    int startIndex = 0;
+
+    for (int i = 0; i < size; i++) {
+        int j = 0;
+        if (*(str + i) == *(substring + j)) {
+            startIndex = i;
+            for (j = 0; j < subSize; j++, i++) {
+
+                if (*(str + i) != *(substring + j)) {
+                    i -= 1;
+                    break;
+
+                }
+
+                if (j + 1 == subSize)
+                    foundMatch = true;
+            }//j loop
+        }//if statement
+
+        if (foundMatch)
+            return startIndex;
+    }//i loop
+
+    if (!foundMatch)
+        return -1;
+
+
+}
+
+void ResizeArr(int*& arr, int& size)
+{
+    int* newArr = new int[size + 1];
+    for (int i = 0; i < size; i++)
+        newArr[i] = arr[i];
+    size++;
+    delete arr;
+    arr = newArr;
+}

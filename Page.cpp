@@ -1,11 +1,13 @@
 #include"Page.h"
 #include "Helpers.h"
+#include "Document.h"
 
 
 Page::Page()
 {
 	colsPtr = nullptr;
 	this->currentCol = 0;
+
 	initializeCols();
 }
 
@@ -21,6 +23,7 @@ Page::~Page () {
 void Page::initializeCols()
 {
 	this->colsPtr = new Col[Page::cols];
+	Page::searching = false;
 	
 }
 
@@ -36,6 +39,7 @@ Col::~Col() {
 
 Line::Line()
 {
+	this->currentAlignment = Document::CurrentAlignment;
 	this->chars = new wchar_t[Page::charsPerLine+1];
 	for (int i = 0; i < Page::charsPerLine; i++)
 		chars[i] = '\0';

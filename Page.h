@@ -4,7 +4,7 @@
 struct Line {
 	wchar_t* chars;
 	int length;//index of current char
-
+	int currentAlignment; //0 left 1 center 2 right
 
 	Line();
 	bool insertChar(wchar_t ch);
@@ -28,6 +28,7 @@ struct Page
 	static int charsPerLine;
 	static bool SetUpDone;
 	static int CurrentSetUpVar;
+	bool searching;
 	Col* colsPtr;
 	int currentCol;
 

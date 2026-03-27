@@ -1,6 +1,6 @@
 // Question7.cpp : Defines the entry point for the application.
 //
-
+//fucking hate this assignment so much 
 #include "framework.h"
 #include "Question7.h"
 #include "Page.h"
@@ -23,8 +23,11 @@ int Page::lines=0;
 int Page::charsPerLine=0;
 bool Page::SetUpDone = false;
 int Page::CurrentSetUpVar = 0;
-Document* Document::doc = nullptr;
+int Document::CurrentAlignment = 0; //left aligned by default
 SpellCheck* SpellCheck::dictionary = new SpellCheck;
+int Document::DocumentCount = 10;
+Document* Document::doc = nullptr;
+int Document::currentDoc=0;
 
 // Forward declarations of functions included in this code module:
 ATOM                MyRegisterClass(HINSTANCE hInstance);
@@ -205,7 +208,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
             //    //autoSave Test
             //static bool AutoSaveOnce = true;
-            //if (Page::SetUpDone && AutoSaveOnce && Document::doc->getPageCount()>1) {
+            //if (Page::SetUpDone && AutoSaveOnce && Document::doc[Document::currentDoc].getPageCount()>1) {
             //    AutoSave();
             //    AutoSaveOnce = false;
             //}
@@ -225,8 +228,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             //output the buffer 
             if(!Page::SetUpDone)
                 TextOutW(hdc, 50, 100, Inputbuffer, InputSize);
-            else
-                TextOutW(hdc, 50, 200, Inputbuffer, InputSize);
+           // else
+                
 
             //=========================debug Info========================================
                   /*
@@ -251,6 +254,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
             if (Page::SetUpDone) {
 
+                bool Search = Document::doc[Document::currentDoc].getPagePtr(Document::doc[Document::currentDoc].getCurrentPage())->searching;
                 int leftMargin = 50;//px
                 int topMargin = 50;//px
                 int windowWidth = rect.right - rect.left;
@@ -259,16 +263,19 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 int lineHeight = 20; 
                 int pagePadding = 120;
                 int pageHeight = lineHeight * Page::lines;
+                int Bufferx, buffery;
+                SIZE AHHH;
 
-                int pageCount = Document::doc->getPageCount();
+
+                int pageCount = Document::doc[Document::currentDoc].getPageCount();
                 for (int i = 0; i < pageCount; i++)
                 {
-                    int colCount = Document::doc->getPagePtr(i)->getColCount();
+                    int colCount = Document::doc[Document::currentDoc].getPagePtr(i)->getColCount();
 
                     for (int j = 0; j < colCount; j++)
                     {
                         //int numberOfgetFails = 0;
-                        Col* Coll = Document::doc->getPagePtr(i)->getColPtr();
+                        Col* Coll = Document::doc[Document::currentDoc].getPagePtr(i)->getColPtr();
                         int lineCount = Coll[j].linesFilled;
                         for (int k = 0; k <=lineCount; k++)
                         {
@@ -276,7 +283,155 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                            // bool ValidWriteAddres = false;
                             int x = leftMargin + j * colWidth;
                             int y = (topMargin + k * lineHeight) + i * (pageHeight + pagePadding);
-                            TextOutW(hdc, x, y, Coll[j].lines[k].chars, getLength(Coll[j].lines[k].chars));
+                            
+
+                            //handle alignment on a per line basis
+                            int lineLen = getLength(Coll[j].lines[k].chars);
+                            int alignMode = Coll[j].lines[k].currentAlignment;
+
+                            wchar_t renderBuffer[500] = { 0 };
+                            int bufferIndex = 0;
+
+                            if (alignMode == 2) //right
+                            {
+                                int emptySpaces = Page::charsPerLine - lineLen;
+                                if (emptySpaces < 0) emptySpaces = 0;
+
+                                // add spaces
+                                for (int space = 0; space < emptySpaces; space++) 
+                                    renderBuffer[bufferIndex++] = L' ';
+
+                                //add chars
+                                for (int chars = 0; chars < lineLen; chars++) renderBuffer[bufferIndex++] = Coll[j].lines[k].chars[chars];
+                            }
+                            else if (alignMode == 1) //center
+                            {
+                                int emptySpaces = (Page::charsPerLine - lineLen) / 2;
+                                if (emptySpaces < 0) emptySpaces = 0;
+
+                                // add spaces
+                                for (int space = 0; space < emptySpaces; space++)
+                                    renderBuffer[bufferIndex++] = L' ';
+
+                                //add chars
+                                for (int chars = 0; chars < lineLen; chars++) renderBuffer[bufferIndex++] = Coll[j].lines[k].chars[chars];
+                            }
+                            else if(alignMode==0) // left aligned
+                            {
+                               
+                                for (int chars = 0; chars < lineLen; chars++) renderBuffer[bufferIndex++] = Coll[j].lines[k].chars[chars];
+                            }
+                            else
+                            {
+                               // Stats temp; 
+                                
+                                //in justified alignment the total extra space needed
+                                //is divided equally among all the words
+
+                                int totalExtraNeeded = Page::charsPerLine - lineLen;
+                                
+                                if (totalExtraNeeded > 0) {
+                                    int spaceCount = 0;
+
+                                    for (int c = 0; c < lineLen; c++) {
+                                        if (Coll[j].lines[k].chars[c] == L' ') spaceCount++;
+                                    }
+
+                                    int extraPerGap = spaceCount > 0 ? totalExtraNeeded / spaceCount : 0;
+                                    int remainder = spaceCount > 0 ? totalExtraNeeded % spaceCount : 0;
+
+                                    for (int c = 0; c < lineLen; c++) {
+                                        renderBuffer[bufferIndex++] = Coll[j].lines[k].chars[c];
+
+                                        if (Coll[j].lines[k].chars[c] == L' ') {//if space found 
+
+                                            for (int s = 0; s < extraPerGap; s++) renderBuffer[bufferIndex++] = L' '; //add extra space to output
+
+                                            if (remainder > 0) {
+                                                renderBuffer[bufferIndex++] = L' ';
+                                                remainder--;
+                                            }//append extra spaces to the end of lines 
+
+                                        }
+
+                                    }//for loop
+                                }//if need to justify 
+                                else
+                                {
+                                    for (int chars = 0; chars < lineLen; chars++) renderBuffer[bufferIndex++] = Coll[j].lines[k].chars[chars];
+                                }//if you dont need any extra space then just print left aligned 
+                            }
+
+
+                            if (Search)
+                            {
+
+
+                                TextOutW(hdc, 50, 300, L"Enter String to find\0", 22);
+                                int searchBufferSize = 500;
+                                wchar_t* searchBuffer=new wchar_t[searchBufferSize];
+                                copyString(L"Hammad\0", searchBuffer, 500); 
+                                int indexSize = 1;
+                                int* indicies = new int[indexSize];
+                                int offset = 0;
+                                offset = findSubstring(Coll[j].lines[k].chars, searchBuffer);
+                                int searchLength = getLength(searchBuffer);
+                                int iteration = 1;
+                                bool fuckThisShit = false;
+                                indicies[0] = offset;
+
+
+                                if(offset!=-1)//if we found a match keep looking for more matches
+                                    while (offset+ searchLength <= Page::charsPerLine && offset!=-1)
+                                    {
+                                        offset += findSubstring(Coll[j].lines[k].chars+offset+searchLength, searchBuffer)+ offset + searchLength;
+                             
+                                    
+                                        if ( offset != -1)
+                                        {
+                                           // if (fuckThisShit) //only resize if the first index is already full
+                                                ResizeArr(indicies, indexSize);
+                                            //makes sure size is exact
+
+
+                                                indicies[indexSize - 1] =  offset;
+
+
+                                            fuckThisShit = true;
+                                        }
+                                        iteration++;
+                                    }
+
+
+                                for(int i=0;i<indexSize;i++)
+                                    if ( indicies[i] != -1)
+                                    {
+                                        //im actually gonna fking cry bro 
+                                        SIZE size,fuckmyLife;
+
+                                        GetTextExtentPoint32W(hdc, renderBuffer,  indicies[i], &size);
+                                        GetTextExtentPoint32W(hdc, renderBuffer +  indicies[i], getLength(searchBuffer), &fuckmyLife);
+
+                                        TextOutW(hdc, x, y, renderBuffer,  indicies[i]);
+                                        SetBkMode(hdc, OPAQUE);
+                                        SetBkColor(hdc, 0xFF7F7F);//pinkish red
+
+                                        TextOutW(hdc, x + size.cx, y, renderBuffer +  indicies[i], getLength(searchBuffer));
+                                        SetBkMode(hdc, TRANSPARENT);
+                                        TextOutW(hdc, x + size.cx+ fuckmyLife.cx, y, renderBuffer +  indicies[i]+ getLength(searchBuffer),(bufferIndex)- ( indicies[i] + getLength(searchBuffer) ) ) ;
+                                        
+                                    }
+                                delete searchBuffer;
+                                delete[] indicies;
+                                indicies = nullptr;
+                                searchBuffer = nullptr;
+                                //Search = false;
+                            }
+                            
+                            TextOutW(hdc, x, y, renderBuffer, bufferIndex);
+                            Bufferx = x;
+                            buffery = y;
+                            GetTextExtentPoint32W(hdc, renderBuffer, getLength(renderBuffer),&AHHH);
                             
                              /* if (!(getLength(Coll[j].lines[k].chars)>2))
                                     numberOfgetFails++;
@@ -284,13 +439,18 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                             if(numberOfgetFails==1)
                                 TextOutW(hdc, x+1, y, Inputbuffer, InputSize);*/
                         }
+                        
+                        if(j==Document::doc[Document::currentDoc].getPagePtr(Document::doc[Document::currentDoc].getCurrentPage())->currentCol)
+                            TextOutW(hdc, Bufferx+AHHH.cx, buffery, Inputbuffer, getLength(Inputbuffer));
                     }
-                }
+                
 
+                }
+                
                 //Display stats and footer
 
                 Stats Footer;
-                int TotalPages = Document::doc->getPageCount();
+                int TotalPages = Document::doc[Document::currentDoc].getPageCount();
                 int CharsNoSpaces = Footer.NumberOfChars - Footer.NumberOfSpaces;
 
                 int ReadTimeSeconds = (Footer.NumberOfWords * 60) / 200;
@@ -365,7 +525,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 while (NumStr[j] != L'\0') StatsBuffer[i++] = NumStr[j++];
                 delete[] NumStr;
 
-                const wchar_t* Str8 = L"s";
+                const wchar_t* Str8 = L"space";
                 j = 0;
                 while (Str8[j] != L'\0') StatsBuffer[i++] = Str8[j++];
 
@@ -379,7 +539,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 j = 0;
                 
                 for (j = 0; j < 5; j++) CurrentPageNumber[j] = L'-';
-                NumStr = intToStr(Document::doc->getCurrentPage()+1);
+                NumStr = intToStr(Document::doc[Document::currentDoc].getCurrentPage()+1);
                 for (int k = 0; NumStr[k] != '\0'; k++) CurrentPageNumber[j++] = NumStr[k];
                 for (j; j < 12; j++) CurrentPageNumber[j] = L'-';
                 CurrentPageNumber[11] = '\0';
@@ -396,26 +556,85 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         }
         break;
 
+
+    case WM_KEYDOWN:
+    {
+        if (GetKeyState(VK_CONTROL) & 256) //check the high order byte for being held down 
+        {
+         
+            if (wParam == L'L') Document::CurrentAlignment = 0;
+            else if (wParam == L'E')Document::CurrentAlignment = 1;
+            else if (wParam == L'R')Document::CurrentAlignment = 2;
+            else if (wParam == L'J') Document::CurrentAlignment = 3;//justified
+            else if (wParam == L'F') Document::doc[Document::currentDoc].getPagePtr(Document::doc[Document::currentDoc].getCurrentPage())->searching = true;
+            else if (GetKeyState(VK_TAB) & 256)
+            {
+                if (GetKeyState(VK_SHIFT) & 256)
+                {
+                    Document::currentDoc--;
+                    if (Document::currentDoc < 0)Document::currentDoc = 0;
+
+                }
+                else
+                {
+                    Document::currentDoc++;
+                    if (Document::currentDoc > 9)Document::currentDoc = 9;
+                }
+            }
+            
+        }
+        else if (GetKeyState(VK_ESCAPE) & 256) exit(0);
+        
+        
+        InvalidateRect(hWnd, NULL, TRUE);
+        break;
+    }
+
     case WM_CHAR:
     {
 
+        if (GetKeyState(VK_CONTROL) & 0x8000) {
+            break;
+        }
+
         static int Index = 0;
         wchar_t input = (wchar_t)wParam;
+        static bool isIndexNegative = false;
 
         //parsing input
         if (input == VK_BACK) {
+            
+           /* if (WordLen > 0)
+                WordBuffer[--WordLen] = L'\0';*/
+           
+            //WHY THE FUCK DOES IT NOT WORK HERE BUT WORK THERE 
+            //ITS THE SAME FUCKING CODE 
+            
+
+
             --Index;
-            if (Index == -1) Index = 0;
+            if (Index == -1)
+            {
+                Index = 0;
+                isIndexNegative = true;
+            }
             Inputbuffer[Index] = '\0';
+                       if(isIndexNegative)
+                Document::BackSpace();
+                
+
            // Inputbuffer[Index + 1] = '\0';
         }
         else
+        {
+            isIndexNegative = false;
             Inputbuffer[Index++] = (wchar_t)wParam;
-        if (Index == InputSize - 1) Index = 0;
-
-        Inputbuffer[Index + 1] = '\0';
-        //Inputbuffer[Index + 2] = '\0';
-
+            if (Index == InputSize - 1) Index = 0;
+        }
+        
+            Inputbuffer[Index + 1] = '\0';
+            //Inputbuffer[Index + 2] = '\0';
+        
 
 
 
@@ -450,7 +669,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 {
                     Page::charsPerLine = size;
                     Page::SetUpDone = true;
-                    Document::doc = new Document;
+                    Document::doc = new Document[Document::DocumentCount];
                 }
                 
             }//set up Page
@@ -469,10 +688,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                     Wordbuffer[l] = '\0';
 
                     for (int i = 0; i < l; i++)
-                        Document::doc->insertChar(Wordbuffer[i], getLength(Wordbuffer + i));
+                        Document::doc[Document::currentDoc].insertChar(Wordbuffer[i], getLength(Wordbuffer + i));
 
                     if (Inputbuffer[k] == ' ') {
-                        Document::doc->insertChar(L' ', 1);
+                        Document::doc[Document::currentDoc].insertChar(L' ', 1);
                         k++;
                     }
 
@@ -484,54 +703,60 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
             else
             {
-                Page* CurrentPage = Document::doc->getPagePtr(Document::doc->getCurrentPage());
+                Page* CurrentPage = Document::doc[Document::currentDoc].getPagePtr(Document::doc[Document::currentDoc].getCurrentPage());
                 Col* CurrentCol = &CurrentPage->colsPtr[CurrentPage->currentCol];
 
-                Document::doc->FlushWord(WordBuffer, WordLen);
+                Document::doc[Document::currentDoc].FlushWord(WordBuffer, WordLen);
+                Document::doc[Document::currentDoc].newLine(); //literal ball torture right here
 
-                if (CurrentCol->linesFilled < Page::lines - 1)
-                    CurrentCol->linesFilled++;
-                else if (CurrentPage->currentCol < Page::cols - 1)
-                    CurrentPage->currentCol++;
-                else
-                    Document::doc->addPage();
 
                 WordLen = 0;
                 ClearBuffer(WordBuffer, WordBufferSize);
+                ClearBuffer(Inputbuffer, InputSize);
             }
 
             ClearBuffer(Inputbuffer, InputSize);
             Index = 0;
+
         } //if enter key pressed
 
 
         else if (Page::SetUpDone)
         {
-            Page* CurrentPage = Document::doc->getPagePtr(Document::doc->getCurrentPage());
+            Page* CurrentPage = Document::doc[Document::currentDoc].getPagePtr(Document::doc[Document::currentDoc].getCurrentPage());
             Col* CurrentCol = &CurrentPage->colsPtr[CurrentPage->currentCol];
             Line* CurrentLine = &CurrentCol->lines[CurrentCol->linesFilled];
 
             if (input == L' ')
             {
-                Document::doc->FlushWord(WordBuffer, WordLen);
+                isIndexNegative = false;
+                Document::doc[Document::currentDoc].FlushWord(WordBuffer, WordLen);
+
                 if (CurrentLine->length < Page::charsPerLine)
-                    Document::doc->insertChar(L' ');
+                    Document::doc[Document::currentDoc].insertChar(L' ');
+
                 WordLen = 0;
                 ClearBuffer(WordBuffer, WordBufferSize);
+               
+                Index = 0;
+                ClearBuffer(Inputbuffer, InputSize);
+                
             }
             else if (input == VK_BACK)
             {
                 if (WordLen > 0)
-                    WordBuffer[--WordLen] = L'\0';
+                    WordBuffer[--WordLen] = L'\0';//why 
+               
             }
             else
             {
+                
                 WordBuffer[WordLen++] = input;
                 WordBuffer[WordLen] = L'\0';
             }
         }
  
-        //im gonna fking cry 
+        //im gonna fking cry x2
 
 
 
@@ -542,7 +767,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     case WM_TIMER:
     {
         if(wParam==2007)
-            if (Page::SetUpDone && Document::doc != nullptr) AutoSave();
+            if (Page::SetUpDone  && Document::doc != nullptr) AutoSave();
             
         break;
     }
@@ -673,7 +898,7 @@ void AutoSave()//dont fucking touch this func anymore
             linesRecorded = 10;
         }
 
-        //save current doc 
+        //save current doc[currentDoc] 
 
         
 
@@ -699,11 +924,11 @@ void AutoSave()//dont fucking touch this func anymore
         HANDLE SaveFile = CreateFileW((wchar_t*)autoSaveName, GENERIC_WRITE, 0, nullptr, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr);
         
 
-        int pageCount = Document::doc->getPageCount();
+        int pageCount = Document::doc[Document::currentDoc].getPageCount();
 
         for (int currentPage = 0; currentPage < pageCount; currentPage++)
         {
-            Col* colsptr = Document::doc->getPagePtr(currentPage)->getColPtr();
+            Col* colsptr = Document::doc[Document::currentDoc].getPagePtr(currentPage)->getColPtr();
             int colNumber = Page::cols;
             //colsptr is a ptr to all cols in the current page
             
@@ -764,6 +989,7 @@ void AutoSave()//dont fucking touch this func anymore
         //this is fking garbage 
         for (int i = 0; i < linesRecorded; i++)
         {
+            if (Lines[i][0] == L'\0') continue;
             unsigned long BytesWritten;
             int j= 0;
             if (j > 10) break;
