@@ -2,10 +2,12 @@
 
 struct SpellCheck
 {
-	wchar_t* Words;
+	wchar_t** Words;
 	long long int WordCount;
 	static SpellCheck* dictionary;
 	SpellCheck();
-	void ReadFile();
+	~SpellCheck();
+	bool isWord(wchar_t* target);
+	void ReadFileDic();
 
 };

@@ -28,6 +28,7 @@ struct Page
 	static int charsPerLine;
 	static bool SetUpDone;
 	static int CurrentSetUpVar;
+	wchar_t* TableOfContents;
 	bool searching;
 	Col* colsPtr;
 	int currentCol;
@@ -41,6 +42,7 @@ struct Page
 	int getColCount();
 	Col* getColPtr();
 	void initializeCols();
+	void BuildTable();
 	//Page(int cols, int lines);
 	//Page(int cols, int lines, int ch); 
 

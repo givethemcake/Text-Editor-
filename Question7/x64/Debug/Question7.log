@@ -1,4 +1,4 @@
-﻿  Documentcpp.cpp
-  Question7.cpp
-  Generating Code...
+﻿  SpellCheck.cpp
+C:\Users\hamma\source\repos\Question7\SpellCheck.cpp(79,38): warning C4244: 'argument': conversion from '__int64' to 'DWORD', possible loss of data
+C:\Users\hamma\source\repos\Question7\SpellCheck.cpp(173,10): warning C4244: 'initializing': conversion from '__int64' to 'int', possible loss of data
   Question7.vcxproj -> C:\Users\hamma\source\repos\Question7\x64\Debug\Question7.exe
