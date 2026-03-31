@@ -1,20 +1,19 @@
-### Pure C++ Text Editor
+<img width="1233" height="1004" alt="image" src="https://github.com/user-attachments/assets/004b02a8-7b84-4d59-9bb7-917ead69eb99" />### Pure C++ Text Editor
 This project is a high-performance, lightweight text editor built from the ground up using **C++** and the **Windows API**. Moving away from standard Windows Edit controls, this implementation features a manual rendering engine and a hierarchical Document Object Model to handle complex layouts and paging.
 
-## Features
+## Technical Highlights
 * **Hierarchical Document Engine:** Implemented a custom-engineered `Document > Page > Column > Line` data structure for precise memory and text management.
 * **Manual GDI Rendering:** Bypasses standard controls to draw text directly via `TextOutW` and `GetTextExtentPoint32W` for pixel-perfect placement.
-* **Intelligent Text Processing:**
-    * **Advanced Spell Checker:** High-performance $O(\log n)$ binary search validation against an external CSV dictionary.
-    * **Word Integrity (Smart Wrapping):** Custom logic ensures words remain intact and do not break awkwardly across lines or columns.
-    * **Dynamic Alignment:** Native support for Left, Center, Right, and **Full Justification** (using pixel-distributed spacing).
-* **Automation & Safety:**
-    * **Birth-Year Auto-Save:** Background backup logic (Timer ID: 2007) that secures progress every 60 seconds.
-    * **Smart Table of Contents:** Automatically generates a TOC by analyzing "header-like" patterns and word frequency at the start of pages.
-* **Analytics & Multitasking:**
-    * **Live Statistics Dashboard:** Real-time metrics for characters (with/without spaces), words, sentences, and **Estimated Reading Time**.
-    * **Multi-Document Support:** Capability to manage up to **10 concurrent documents** in memory with fast switching.
-    * **Search & Highlight:** Integrated search functionality with visual background highlighting for matches.
+* **Optimized Spell Checker:** Features high-performance $O(\log n)$ binary search validation against an external CSV dictionary.
+* **Smart Word Integrity:** Custom wrapping logic ensures words remain intact and do not break awkwardly across lines or columns.
+* **Dynamic Alignment Engine:** Native support for Left, Center, Right, and **Full Justification** using manual pixel-distribution spacing.
+
+## Key Features 
+* **Automation & Safety:** A background backup logic (Timer ID: 2007) that secures progress every 60 seconds.
+* **Live Statistics Dashboard:** Real-time metrics for characters (with/without spaces), words, sentences, and **Estimated Reading Time**.
+* **Intelligent Navigation:** Automatic **Table of Contents (TOC)** generation based on page content analysis and "header-like" pattern detection.
+* **Multi-Document Multitasking:** Capability to manage up to **10 concurrent documents** in memory with integrated search and visual match highlighting.
+* **Search & Highlight:** Integrated search functionality with visual background highlighting for matches.
 
 
 ## KeyBoard Shorcuts to know
