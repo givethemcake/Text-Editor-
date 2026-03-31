@@ -28,7 +28,7 @@ This project is a high-performance, lightweight text editor built from the groun
 |Ctrl + Tab | Move Forward one Document |
 |Ctrl + Shift + Tab| Move backwards one Document |
 
-## 🛠️ Build & Setup Guidelines
+## Build & Setup Guidelines
 ### Prerequisites
 * **Windows OS** (WinAPI Dependency).
 * **Visual Studio 2022** (or C++ compiler with Windows SDK).
