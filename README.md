@@ -3,14 +3,18 @@ A Modern-ish Text Editor using purely C++ and WinApi
 
 ## Features
 * Implemented a Document->Page->column->row data structure.
-* Spell checker.
+* **Manual Rendering:** Uses GDI (`TextOutW`) to draw text
+* **Spell checker**:-
+                    binary search validation against an external CSV dictionary
 * Search and Highlight.
-* Auto saving every 60 seconds.
+* **Auto saving every 60 seconds**
+                    Integrated background backup logic that triggers every 60 seconds (Timer ID: 2007).
 * The ability to Control the number of columns, rows and charachters per rows.
-* Text Alignment
-* Word Integrity across lines
-* Automatic Table of Contents generation.
-* Document Statistics 
+* **Text Alignment**
+* **Word Integrity across lines**
+* **Automatic Table of Contents generation.**
+* **Live Stats:-**
+*               Real-time metrics for characters, words, sentences, and estimated reading time.
 * Supports ten Concurrent Documents.
 
 
