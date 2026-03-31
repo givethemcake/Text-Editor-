@@ -8,12 +8,16 @@ This project is a high-performance, lightweight text editor built from the groun
 * **Smart Word Integrity:** Custom wrapping logic ensures words remain intact and do not break awkwardly across lines or columns.
 * **Dynamic Alignment Engine:** Native support for Left, Center, Right, and **Full Justification** using manual pixel-distribution spacing.
 
+  <img width="1919" height="1005" alt="image" src="https://github.com/user-attachments/assets/9e8434b1-8061-4132-aef4-4e1dc5091d51" />
+
+
 ## Key Features 
 * **Automation & Safety:** A background backup logic (Timer ID: 2007) that secures progress every 60 seconds.
 * **Live Statistics Dashboard:** Real-time metrics for characters (with/without spaces), words, sentences, and **Estimated Reading Time**.
 * **Intelligent Navigation:** Automatic **Table of Contents (TOC)** generation based on page content analysis and "header-like" pattern detection.
 * **Multi-Document Multitasking:** Capability to manage up to **10 concurrent documents** in memory with integrated search and visual match highlighting.
 * **Search & Highlight:** Integrated search functionality with visual background highlighting for matches.
+ <img width="1328" height="485" alt="image" src="https://github.com/user-attachments/assets/df12aedf-752e-40e1-9b4d-691132196dd6" />
 
 
 ## KeyBoard Shorcuts to know
@@ -38,6 +42,8 @@ This project is a high-performance, lightweight text editor built from the groun
 1. Open the source files in a **Windows Desktop Application** project.
 2. Ensure the Character Set is set to **Unicode** in Project Properties.
 3. Compile for **x64** or **x86**.
+
+<img width="1401" height="669" alt="image" src="https://github.com/user-attachments/assets/326a7d1c-7e74-47f6-a8be-acb7f185adef" />
 
 
 ## Credits ❤️
