@@ -14,7 +14,7 @@ A Modern-ish Text Editor using purely C++ and WinApi
 * **Word Integrity across lines**
 * **Automatic Table of Contents generation.**
 * **Live Stats:-**
-*               Real-time metrics for characters, words, sentences, and estimated reading time.
+               Real-time metrics for characters, words, sentences, and estimated reading time.
 * Supports ten Concurrent Documents.
 
 
