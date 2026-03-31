@@ -15,8 +15,9 @@ A Modern-ish Text Editor using purely C++ and WinApi
 
 
 ## KeyBoard Shorcuts to know
-|---;| ---;|
-|Combination| Action |
+
+| Combination | Action |
+| :--- | :--- |
 |Ctrl + L / E / R | Align Text Left / Center / Right |
 |Ctrl + J | Justify Text |
 |Ctrl + F | Toggle Search Mode |
