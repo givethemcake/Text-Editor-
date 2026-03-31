@@ -26,6 +26,7 @@ This project is a high-performance, lightweight text editor built from the groun
 |Ctrl + T | Toggle Table of Contents |
 |Ctrl + Tab | Move Forward one Document |
 |Ctrl + Shift + Tab| Move backwards one Document |
+|Ctrl + ESC| Exit|
 
 ## Build & Setup Guidelines
 ### Prerequisites
