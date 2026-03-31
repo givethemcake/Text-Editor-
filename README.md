@@ -1,4 +1,4 @@
-<img width="1233" height="1004" alt="image" src="https://github.com/user-attachments/assets/004b02a8-7b84-4d59-9bb7-917ead69eb99" />### Pure C++ Text Editor
+### Pure C++ Text Editor
 This project is a high-performance, lightweight text editor built from the ground up using **C++** and the **Windows API**. Moving away from standard Windows Edit controls, this implementation features a manual rendering engine and a hierarchical Document Object Model to handle complex layouts and paging.
 
 ## Technical Highlights
