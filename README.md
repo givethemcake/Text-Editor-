@@ -2,19 +2,19 @@
 A Modern-ish Text Editor using purely C++ and WinApi
 
 ## Features
-* Implemented a Document->Page->column->row data structure.
-* **Manual Rendering:** Uses GDI (`TextOutW`) to draw text
-* **Spell checker**: binary search validation against an external CSV dictionary
-* Search and Highlight.
-* **Auto saving every 60 seconds**
-                    Integrated background backup logic that triggers every 60 seconds (Timer ID: 2007).
-* The ability to Control the number of columns, rows and charachters per rows.
-* **Text Alignment**
-* **Word Integrity across lines**
-* **Automatic Table of Contents generation.**
-* **Live Stats:-**
-               Real-time metrics for characters, words, sentences, and estimated reading time.
-* Supports ten Concurrent Documents.
+* **Hierarchical Document Engine:** Implemented a custom-engineered `Document > Page > Column > Line` data structure for precise memory and text management.
+* **Manual GDI Rendering:** Bypasses standard controls to draw text directly via `TextOutW` and `GetTextExtentPoint32W` for pixel-perfect placement.
+* **Intelligent Text Processing:**
+    * **Advanced Spell Checker:** High-performance $O(\log n)$ binary search validation against an external CSV dictionary.
+    * **Word Integrity (Smart Wrapping):** Custom logic ensures words remain intact and do not break awkwardly across lines or columns.
+    * **Dynamic Alignment:** Native support for Left, Center, Right, and **Full Justification** (using pixel-distributed spacing).
+* **Automation & Safety:**
+    * **Birth-Year Auto-Save:** Background backup logic (Timer ID: 2007) that secures progress every 60 seconds.
+    * **Smart Table of Contents:** Automatically generates a TOC by analyzing "header-like" patterns and word frequency at the start of pages.
+* **Analytics & Multitasking:**
+    * **Live Statistics Dashboard:** Real-time metrics for characters (with/without spaces), words, sentences, and **Estimated Reading Time**.
+    * **Multi-Document Support:** Capability to manage up to **10 concurrent documents** in memory with fast switching.
+    * **Search & Highlight:** Integrated search functionality with visual background highlighting for matches.
 
 
 ## KeyBoard Shorcuts to know
