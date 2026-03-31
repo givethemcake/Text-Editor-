@@ -25,4 +25,6 @@ A Modern-ish Text Editor using purely C++ and WinApi
 |Ctrl + Tab | Move Forward one Document |
 |Ctrl + Shift + Tab| Move backwards one Document |
 
-## Made with love <3 by Hammad Rehan (2nd Semester Cs Student FAST NUCES ISB)
+## Credits ❤️
+# Made by Hammad Rehan
+2nd Semester CS Student, FAST NUCES ISB
