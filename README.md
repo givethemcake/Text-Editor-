@@ -1,5 +1,5 @@
 ### Pure C++ Text Editor
-A Modern-ish Text Editor using purely C++ and WinApi
+This project is a high-performance, lightweight text editor built from the ground up using **C++** and the **Windows API**. Moving away from standard Windows Edit controls, this implementation features a manual rendering engine and a hierarchical Document Object Model to handle complex layouts and paging.
 
 ## Features
 * **Hierarchical Document Engine:** Implemented a custom-engineered `Document > Page > Column > Line` data structure for precise memory and text management.
