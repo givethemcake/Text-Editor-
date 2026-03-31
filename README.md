@@ -35,7 +35,7 @@ This project is a high-performance, lightweight text editor built from the groun
 * **Dictionary File:** `OPTED-Dictionary.csv` must be in the executable directory for spell-check functionality.
 
 ### Build Steps
-1. Open the source files (`Q7_Main.cpp` and `Q7_Submission.h`) in a **Windows Desktop Application** project.
+1. Open the source files in a **Windows Desktop Application** project.
 2. Ensure the Character Set is set to **Unicode** in Project Properties.
 3. Compile for **x64** or **x86**.
 
