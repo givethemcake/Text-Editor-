@@ -204,7 +204,7 @@ void ResizeArr(int*& arr, int& size)
     for (int i = 0; i < size; i++)
         newArr[i] = arr[i];
     size++;
-    delete arr;
+    delete [] arr;
     arr = newArr;
 }
 void Searchfunc(HDC& hdc, wchar_t*& Inputbuffer, int& InputSize, Col* Coll, int i, int k, int j, wchar_t* renderBuffer, int& renderSize, int& x, int& y, int& bufferIndex)
@@ -268,7 +268,7 @@ void Searchfunc(HDC& hdc, wchar_t*& Inputbuffer, int& InputSize, Col* Coll, int 
 
             TextOutW(hdc, x + size.cx + fuckmyLife.cx, y, renderBuffer + indicies[i] + getLength(searchBuffer), (bufferIndex)-(indicies[i] + getLength(searchBuffer)));
         }
-    delete searchBuffer;
+    delete [] searchBuffer;
     delete[] indicies;
     indicies = nullptr;
     searchBuffer = nullptr;
