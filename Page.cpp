@@ -384,8 +384,8 @@ void Page::BuildTable()
 	}
 
 	for (int i = 1; i < 4; i++) delete Words[i];
-	delete Words;
-	delete buffer;
+	delete [] Words;
+	delete [] buffer;
 
 }
 
