@@ -208,6 +208,7 @@ int extractWords(wchar_t* buffer, int& stringlen)
 
 		i++;
 	}
+	return -1;
 }
 
 //wchar_t* operator+(const wchar_t* str1, const wchar_t* str2)
@@ -279,7 +280,7 @@ wchar_t* concatenate(const wchar_t* str1, const wchar_t* str2) {
 
 void Page::BuildTable() 
 {
-	if (!this->TableOfContents)
+	if (this->TableOfContents)
 		delete[] TableOfContents;
 
 	int bufferSize = Page::charsPerLine;
