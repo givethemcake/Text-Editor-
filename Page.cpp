@@ -19,7 +19,7 @@ Page::Page()
 
 Page::~Page () {
 	if (colsPtr != nullptr) delete[] colsPtr;
-	if (!this->TableOfContents) delete[] TableOfContents;
+	if (this->TableOfContents) delete[] TableOfContents;
 }
 
 void Page::initializeCols()
